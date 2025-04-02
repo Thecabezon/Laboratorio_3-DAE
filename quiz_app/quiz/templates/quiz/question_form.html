@@ -3,86 +3,51 @@
 {% block title %}Add Question{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-10 offset-md-1">
-        <div class="card">
-            <div class="card-header">
-                <h2>Add Question to: {{ exam.title }}</h2>
-            </div>
-            <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
-                    
-                    <div class="mb-3">
-                        <label for="{{ question_form.text.id_for_label }}" class="form-label">Question Text</label>
-                        {{ question_form.text }}
-                        {% if question_form.text.errors %}
-                            <div class="text-danger">{{ question_form.text.errors }}</div>
-                        {% endif %}
-                    </div>
-                    
-                    <h4 class="mt-4 mb-3">Answer Choices</h4>
-                    <div class="alert alert-info">
-                        Mark the checkbox "Is correct" for the correct answer option.
-                    </div>
-                    
-                    {{ formset.management_form }}
-                    <div id="options-container">
-                        {% for choice_form in formset %}
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-9">
-                                            <label class="form-label">Option {{ forloop.counter }}</label>
-                                            {{ choice_form.text }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-check mt-2">
-                                                {{ choice_form.is_correct }}
-                                                <label class="form-check-label" for="{{ choice_form.is_correct.id_for_label }}">
-                                                    Is correct
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{ choice_form.id }}
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    
-                    <div class="d-flex justify-content-between mt-4">
-                        <a href="{% url 'exam_detail' exam.id %}" class="btn btn-secondary">Cancel</a>
-                        <div>
-                            <button type="submit" name="add_another" class="btn btn-info">Save and Add Another</button>
-                            <button type="submit" class="btn btn-primary">Save and Finish</button>
+<div class="form-container">
+    <h1>Add Question to: {{ exam.title }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ question_form.text.id_for_label }}" class="form-label">Question Text</label>
+            {{ question_form.text|add_class:"form-input" }}
+            {% if question_form.text.errors %}
+                <div class="text-danger">{{ question_form.text.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <h4 class="mt-4 mb-3">Answer Choices</h4>
+        <div class="alert alert-info">
+            Mark the checkbox "Is correct" for the correct answer option.
+        </div>
+        
+        {{ formset.management_form }}
+        <div id="options-container">
+            {% for choice_form in formset %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">Option {{ forloop.counter }}</label>
+                            {{ choice_form.text|add_class:"form-input" }}
+                        </div>
+                        <div class="form-check">
+                            {{ choice_form.is_correct }}
+                            <label class="form-check-label" for="{{ choice_form.is_correct.id_for_label }}">
+                                Is correct
+                            </label>
                         </div>
                     </div>
-                </form>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="form-actions">
+            <a href="{% url 'exam_detail' exam.id %}" class="button button-secondary">Cancel</a>
+            <div>
+                <button type="submit" name="add_another" class="button button-info">Save and Add Another</button>
+                <button type="submit" class="button button-primary">Save and Finish</button>
             </div>
         </div>
-    </div>
+    </form>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    // Asegurar que solo una opción sea marcada como correcta
-    document.addEventListener('DOMContentLoaded', function() {
-        const checkboxes = document.querySelectorAll('input[type=checkbox]');
-        
-        checkboxes.forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    // Desmarcar las demás opciones
-                    checkboxes.forEach(function(otherCheckbox) {
-                        if (otherCheckbox !== checkbox) {
-                            otherCheckbox.checked = false;
-                        }
-                    });
-                }
-            });
-        });
-    });
-</script>
 {% endblock %}
