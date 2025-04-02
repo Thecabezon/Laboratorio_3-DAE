@@ -220,6 +220,13 @@ body {
     background-color: white;
 }
 
+.badge {
+    background-color: #166534;
+    transform: translateY(-5px);
+    border-radius: 5px;
+    color: white;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .nav-container {
