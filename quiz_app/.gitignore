@@ -1,0 +1,19 @@
+# Archivos de Python
+*.pyc
+__pycache__/
+
+# Entornos virtuales
+venv/
+env/
+
+# Archivos de configuración locales
+*.sqlite3
+*.log
+.env
+
+# Archivos de migraciones
+migrations/
+
+# Archivos estáticos y media generados
+staticfiles/
+media/
